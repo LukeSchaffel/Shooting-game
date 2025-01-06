@@ -1,11 +1,10 @@
--- _G.love = require('love')
-local Enemy = require('Enemy')
-
 Player = {speed = 500, width = 100, height = 100}
 Game = {width = 1200, height = 800}
 Mouse = {}
 Bullets = {}
 Enemies = {}
+local Enemy = require('Enemy')
+local handleEnemySpawns = require('spawnEnemy')
 
 function Player:move(dt)
     if love.keyboard.isDown("w") then self.y = self.y - self.speed * dt end
@@ -32,9 +31,14 @@ function moveBullets(dt)
             if bullet.x > enemy.x - enemy.width / 2 and bullet.x < enemy.x +
                 enemy.width / 2 and bullet.y > enemy.y - enemy.height / 2 and
                 bullet.y < enemy.y + enemy.height / 2 then
-
                 local isDead = enemy:takeDamage(1)
-                if isDead then table.remove(Enemies, i) end
+                if isDead then
+                    table.remove(Enemies, i)
+                    Player.kills = Player.kills + 1
+                    if Player.kills % 5 == 0 then
+                        Game.level = Game.level + 1
+                    end
+                end
             end
 
         end
@@ -60,9 +64,11 @@ function love.load()
     Player.y = 200
     Player.health = 5
     Player.ammo = 100
+    Player.kills = 0
+    Game.level = 1
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(0.14, 0.36, 0.46)
-    local newEnemy = Enemy()
+    local newEnemy = Enemy(Game.level)
     table.insert(Enemies, newEnemy)
 end
 
@@ -70,6 +76,7 @@ function love.update(dt)
     Player:move(dt)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     moveBullets(dt)
+    handleEnemySpawns(dt)
     for _, enemy in ipairs(Enemies) do enemy:move(Player) end
 end
 
@@ -77,6 +84,9 @@ function love.draw()
     -- Print ammo count at the bottom left
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Ammo: " .. Player.ammo, 10, Game.height - 20)
+    -- Print Kills count at the top left
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Kills: " .. Player.kills, 10, 10)
 
     love.graphics.setColor(40, 50, 60)
     love.graphics.rectangle('fill', Player.x, Player.y, Player.width,

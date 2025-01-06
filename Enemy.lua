@@ -1,23 +1,23 @@
-function Enemy()
+function Enemy(level)
     return {
-        level = 1,
+        level = level,
         x = 20,
         y = 20,
-        width = 30,
-        height = 30,
-        health = 1,
+        width = 30 - level,
+        height = 30 - level,
+        health = 1 + level,
 
         move = function(self, player)
             if player.x - self.x > 0 then
-                self.x = self.x + self.level
+                self.x = self.x + 1
             elseif player.x - self.x < 0 then
-                self.x = self.x - self.level
+                self.x = self.x - 1
             end
 
             if player.y - self.y > 0 then
-                self.y = self.y + self.level
+                self.y = self.y + 1
             elseif player.y - self.y < 0 then
-                self.y = self.y - self.level
+                self.y = self.y - 1
             end
 
         end,

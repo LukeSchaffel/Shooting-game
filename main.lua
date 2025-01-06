@@ -1,8 +1,11 @@
 -- _G.love = require('love')
+local Enemy = require('Enemy')
+
 Player = {speed = 500, width = 100, height = 100}
 Game = {width = 1200, height = 800}
 Mouse = {}
 Bullets = {}
+Enemies = {}
 
 function Player:move(dt)
     if love.keyboard.isDown("w") then self.y = self.y - self.speed * dt end
@@ -23,6 +26,18 @@ function moveBullets(dt)
         -- remove bullet after leaving screen
         if bullet.x < 0 or bullet.x > Game.width or bullet.y < 0 or bullet.y >
             Game.height then table.remove(Bullets, i) end
+
+        -- Detect bullet collision with Enemies
+        for i, enemy in ipairs(Enemies) do
+            if bullet.x > enemy.x - enemy.width / 2 and bullet.x < enemy.x +
+                enemy.width / 2 and bullet.y > enemy.y - enemy.height / 2 and
+                bullet.y < enemy.y + enemy.height / 2 then
+
+                local isDead = enemy:takeDamage(1)
+                if isDead then table.remove(Enemies, i) end
+            end
+
+        end
     end
 end
 
@@ -47,11 +62,15 @@ function love.load()
     Player.ammo = 100
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(0.14, 0.36, 0.46)
+    local newEnemy = Enemy()
+    table.insert(Enemies, newEnemy)
 end
 
 function love.update(dt)
+    Player:move(dt)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     moveBullets(dt)
+    for _, enemy in ipairs(Enemies) do enemy:move(Player) end
 end
 
 function love.draw()
@@ -70,6 +89,8 @@ function love.draw()
     for _, bullet in ipairs(Bullets) do
         love.graphics.circle('fill', bullet.x, bullet.y, 5) -- Draw bullets as small circles
     end
+
+    for _, enemy in ipairs(Enemies) do enemy:draw() end
 end
 
 function love.mousepressed(x, y, button, istouch)

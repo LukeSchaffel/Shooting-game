@@ -1,3 +1,5 @@
+local love = require('love')
+
 function Enemy(level)
     local x, y
     -- Generate random starting position outside the game board
@@ -13,8 +15,8 @@ function Enemy(level)
         level = level,
         x = x,
         y = y,
-        width = 30 - level,
-        height = 30 - level,
+        width = 50 - level,
+        height = 50 - level,
         health = 0 + level,
 
         move = function(self, player)
@@ -34,8 +36,7 @@ function Enemy(level)
 
         draw = function(self)
             love.graphics.setColor(0, 0, 0)
-            love.graphics
-                .circle('fill', self.x, self.y, self.width, self.height)
+            love.graphics.rectangle('fill', self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
         end,
 
         takeDamage = function(self, damage)

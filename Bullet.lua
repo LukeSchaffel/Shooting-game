@@ -23,9 +23,9 @@ function Bullet()
                 local enemyHeightHalf = enemy.height / 2
 
                 if bullet.x + bulletRadius > enemy.x - enemyWidthHalf and
-                   bullet.x - bulletRadius < enemy.x + enemyWidthHalf and
-                   bullet.y + bulletRadius > enemy.y - enemyHeightHalf and
-                   bullet.y - bulletRadius < enemy.y + enemyHeightHalf then
+                    bullet.x - bulletRadius < enemy.x + enemyWidthHalf and
+                    bullet.y + bulletRadius > enemy.y - enemyHeightHalf and
+                    bullet.y - bulletRadius < enemy.y + enemyHeightHalf then
 
                     local isDead = enemy:takeDamage(1)
                     if isDead then

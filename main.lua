@@ -3,9 +3,7 @@ local love = require('love')
 Player = {speed = 500, width = 30, height = 30}
 Game = {width = 1200, height = 800}
 Mouse = {}
-Bullets = {}
-Enemies = {}
-local Enemy = require('Enemy')
+
 local handleEnemySpawns = require('spawnEnemy')
 local Bullet = require('Bullet')
 
@@ -34,17 +32,27 @@ function Player:shoot(dt)
     end
 end
 
-function love.load()
+local function init()
     Player.x = 200
     Player.y = 200
     Player.health = 5
     Player.ammo = 100
     Player.kills = 0
     Game.level = 1
+    Game.isGameOver = false
+    Bullets = {}
+    Enemies = {}
+
+end
+
+function love.load()
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(0.14, 0.36, 0.46)
-    local newEnemy = Enemy(Game.level)
-    table.insert(Enemies, newEnemy)
+    init()
+end
+
+local function checkGameOver()
+    if Player.health == 0 then Game.isGameOver = true end
 end
 
 function love.update(dt)
@@ -52,10 +60,22 @@ function love.update(dt)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     moveBullets(dt)
     handleEnemySpawns(dt)
-    for _, enemy in ipairs(Enemies) do enemy:move(Player) end
+    for _, enemy in ipairs(Enemies) do enemy:move(dt, Player) end
+    checkGameOver()
 end
 
 function love.draw()
+
+    if Game.isGameOver then
+        love.graphics.setColor(1, 1, 1) -- White color for the text
+        love.graphics.setFont(love.graphics.newFont(30)) -- Set font size
+        love.graphics.print("Game Over", Game.width / 2 - 100,
+                            Game.height / 2 - 50) -- Display "Game Over" at the center of the screen
+        love.graphics.print("Press 'R' to restart", Game.width / 2 - 150,
+                            Game.height / 2) -- Display restart instructions
+        return
+    end
+
     -- Print ammo count at the bottom left
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Ammo: " .. Player.ammo, 10, Game.height - 20)
@@ -78,3 +98,5 @@ end
 function love.mousepressed(x, y, button, istouch)
     if button == 1 then Player:shoot() end
 end
+
+function love.keypressed(key) if key == "r" then init() end end

@@ -27,18 +27,21 @@ function moveBullets(dt)
             Game.height then table.remove(Bullets, i) end
 
         -- Detect bullet collision with Enemies
-        for i, enemy in ipairs(Enemies) do
+        for j, enemy in ipairs(Enemies) do
             if bullet.x > enemy.x - enemy.width / 2 and bullet.x < enemy.x +
                 enemy.width / 2 and bullet.y > enemy.y - enemy.height / 2 and
                 bullet.y < enemy.y + enemy.height / 2 then
+
                 local isDead = enemy:takeDamage(1)
                 if isDead then
-                    table.remove(Enemies, i)
+                    table.remove(Enemies, j)
                     Player.kills = Player.kills + 1
                     if Player.kills % 5 == 0 then
                         Game.level = Game.level + 1
                     end
                 end
+                table.remove(Bullets, i)
+                break
             end
 
         end

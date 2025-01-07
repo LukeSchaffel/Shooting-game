@@ -1,11 +1,21 @@
 function Enemy(level)
+    local x, y
+    -- Generate random starting position outside the game board
+    if math.random() < 0.5 then
+        x = -30 -- Start outside the left side
+        y = math.random(0, Game.height) -- Random y position within the height
+    else
+        x = math.random(0, Game.width) -- Random x position within the width
+        y = Game.height + 30 -- Start outside the bottom side
+    end
+
     return {
         level = level,
-        x = 20,
-        y = 20,
+        x = x,
+        y = y,
         width = 30 - level,
         height = 30 - level,
-        health = 1 + level,
+        health = 0 + level,
 
         move = function(self, player)
             if player.x - self.x > 0 then

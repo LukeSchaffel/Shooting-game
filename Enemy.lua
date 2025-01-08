@@ -34,13 +34,9 @@ function Enemy(level)
             end
 
             -- Detect collision with player
-            local playerWidthHalf = player.width / 2
-            local playerHeightHalf = player.height / 2
-
-            if self.x + self.width / 2 > player.x - playerWidthHalf and self.x -
-                self.width / 2 < player.x + playerWidthHalf and self.y +
-                self.height / 2 > player.y - playerHeightHalf and self.y -
-                self.height / 2 < player.y + playerHeightHalf then
+            if self.x < player.x + player.width and self.x + self.width >
+                player.x and self.y < player.y + player.height and self.y +
+                self.height > player.y then
                 Player.health = Player.health - 1
                 self.health = 0
                 table.remove(Enemies, i)

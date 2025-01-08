@@ -32,6 +32,16 @@ function Player:shoot(dt)
     end
 end
 
+function Player:rotate()
+    -- Calculate the direction from the player to the mouse position
+    local dx = Mouse.x - (Player.x + Player.width / 2)
+    local dy = Mouse.y - (Player.y + Player.height / 2)
+
+    -- Calculate the angle in radians using atan2
+    local angle = math.atan2(dy, dx)
+    Player.angle = angle
+end
+
 local function init()
     Player.x = 200
     Player.y = 200
@@ -56,19 +66,12 @@ function love.load()
         local originX = spriteWidth / 2
         local originY = spriteHeight / 2
 
-        -- Calculate the direction from the player to the mouse position
-        local dx = love.mouse.getX() - (Player.x + Player.width / 2)
-        local dy = love.mouse.getY() - (Player.y + Player.height / 2)
-
-        -- Calculate the angle in radians using atan2
-        local angle = math.atan2(dy, dx)
-
         -- Hitbox if needed
         -- love.graphics.rectangle('fill', Player.x, Player.y, Player.width,
         --                         Player.height)
         love.graphics.draw(Player.sprite, Player.x + Player.width / 2,
-                           Player.y + Player.height / 2, angle, scaleX, scaleY,
-                           originX, originY)
+                           Player.y + Player.height / 2, Player.angle, scaleX,
+                           scaleY, originX, originY)
 
     end
     love.mouse.setVisible(false)
@@ -81,8 +84,9 @@ local function checkGameOver()
 end
 
 function love.update(dt)
-    Player:move(dt)
     Mouse.x, Mouse.y = love.mouse.getPosition()
+    Player:move(dt)
+    Player:rotate()
     moveBullets(dt)
     handleEnemySpawns(dt)
     for _, enemy in ipairs(Enemies) do enemy:move(dt, Player) end

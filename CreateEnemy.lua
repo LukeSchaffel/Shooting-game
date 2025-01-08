@@ -1,6 +1,6 @@
 local love = require('love')
 
-function Enemy(level)
+function CreateEnemy(level)
     local x, y
     -- Generate random starting position outside the game board
     if math.random() < 0.5 then
@@ -37,7 +37,7 @@ function Enemy(level)
             if self.x < player.x + player.width and self.x + self.width >
                 player.x and self.y < player.y + player.height and self.y +
                 self.height > player.y then
-                Player.health = Player.health - 1
+                player.health = player.health - 1
                 self.health = 0
                 table.remove(Enemies, i)
             end
@@ -60,4 +60,4 @@ function Enemy(level)
     }
 end
 
-return Enemy
+return CreateEnemy

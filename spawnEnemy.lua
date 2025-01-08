@@ -1,7 +1,7 @@
-local Enemy = require('Enemy')
+local CreateEnemy = require('CreateEnemy')
 
 local function spawnEnemy(level)
-    local newEnemy = Enemy(level)
+    local newEnemy = CreateEnemy(level)
     table.insert(Enemies, newEnemy)
 end
 

@@ -1,5 +1,5 @@
 local love = require('love')
-
+local Player = require('Player')
 function Bullet()
     return {
         x = Player.x + Player.width / 2,

@@ -1,6 +1,6 @@
 local love = require('love')
 
-Player = {speed = 500, width = 30, height = 30}
+Player = {speed = 500, width = 100, height = 100}
 Game = {width = 1200, height = 800}
 Mouse = {}
 
@@ -53,10 +53,23 @@ function love.load()
 
         local scaleX = Player.width / spriteWidth
         local scaleY = Player.height / spriteHeight
+        local originX = spriteWidth / 2
+        local originY = spriteHeight / 2
 
-        love.graphics.rectangle('fill', Player.x, Player.y, Player.width,
-                                Player.height)
-        love.graphics.draw(Player.sprite, Player.x, Player.y, 0, scaleX, scaleY)
+        -- Calculate the direction from the player to the mouse position
+        local dx = love.mouse.getX() - (Player.x + Player.width / 2)
+        local dy = love.mouse.getY() - (Player.y + Player.height / 2)
+
+        -- Calculate the angle in radians using atan2
+        local angle = math.atan2(dy, dx)
+
+        -- Hitbox if needed
+        -- love.graphics.rectangle('fill', Player.x, Player.y, Player.width,
+        --                         Player.height)
+        love.graphics.draw(Player.sprite, Player.x + Player.width / 2,
+                           Player.y + Player.height / 2, angle, scaleX, scaleY,
+                           originX, originY)
+
     end
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(0.14, 0.36, 0.46)

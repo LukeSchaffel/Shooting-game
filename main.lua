@@ -46,6 +46,18 @@ local function init()
 end
 
 function love.load()
+    Player.sprite = love.graphics.newImage('sprites/player.png')
+    function Player:draw()
+        local spriteWidth = Player.sprite:getWidth()
+        local spriteHeight = Player.sprite:getHeight()
+
+        local scaleX = Player.width / spriteWidth
+        local scaleY = Player.height / spriteHeight
+
+        love.graphics.rectangle('fill', Player.x, Player.y, Player.width,
+                                Player.height)
+        love.graphics.draw(Player.sprite, Player.x, Player.y, 0, scaleX, scaleY)
+    end
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(0.14, 0.36, 0.46)
     init()
@@ -83,8 +95,7 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Kills: " .. Player.kills, 10, 10)
 
-    love.graphics.setColor(40, 50, 60)
-    love.graphics.circle('fill', Player.x, Player.y, Player.width)
+    Player:draw()
 
     love.graphics.setColor(1, 1, 1) -- White color for the circle
     love.graphics.circle('fill', Mouse.x, Mouse.y, 10) -- Draw a small circle at the mouse position

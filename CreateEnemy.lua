@@ -1,5 +1,5 @@
 local love = require('love')
-
+local enemyImg = love.graphics.newImage('sprites/enemyShip.png')
 function CreateEnemy(level)
     local x, y
     -- Generate random starting position outside the game board
@@ -15,8 +15,8 @@ function CreateEnemy(level)
         level = level,
         x = x,
         y = y,
-        width = 50 - level * 2,
-        height = 50 - level * 2,
+        width = 100,
+        height = 100,
         health = 0 + level,
         speed = 100 * level,
 
@@ -33,6 +33,10 @@ function CreateEnemy(level)
                 self.y = self.y - self.speed * dt
             end
 
+            local dx = player.x - self.x
+            local dy = player.y - self.y
+            self.angle = math.atan2(dy, dx)
+
             -- Detect collision with player
             if self.x < player.x + player.width and self.x + self.width >
                 player.x and self.y < player.y + player.height and self.y +
@@ -45,9 +49,23 @@ function CreateEnemy(level)
         end,
 
         draw = function(self)
-            love.graphics.setColor(0, 0, 0)
-            love.graphics.rectangle('fill', self.x, self.y, self.width,
-                                    self.height)
+            local spriteWidth = enemyImg:getWidth()
+            local spriteHeight = enemyImg:getHeight()
+
+            local scaleX = self.width / spriteWidth
+            local scaleY = self.height / spriteHeight
+
+            local originX = spriteWidth / 2
+            local originY = spriteHeight / 2
+
+            -- Hit box info
+            -- love.graphics.setColor(0, 0, 0)
+            -- love.graphics.rectangle( 'fill', self.x, self.y, self.width,
+            --                         self.height)
+            -- love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(enemyImg, self.x + self.width / 2,
+                               self.y + self.height / 2,
+                               self.angle + math.pi / 2, 1, 1, originX, originY)
         end,
 
         takeDamage = function(self, damage)

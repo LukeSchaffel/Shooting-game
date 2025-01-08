@@ -31,6 +31,8 @@ function Bullet()
 
                     local isDead = enemy:takeDamage(1)
                     if isDead then
+                        table.insert(DeadEnemies,
+                                     {x = enemy.x, y = enemy.y, time = 1})
                         table.remove(Enemies, j)
                         Player.kills = Player.kills + 1
                         if Player.kills % 5 == 0 then
@@ -38,6 +40,7 @@ function Bullet()
                         end
                     end
                     table.remove(Bullets, i)
+
                     break
                 end
 

@@ -40,7 +40,7 @@ end
 function Player:rotate()
     local dx = Mouse.x - (self.x + self.width / 2)
     local dy = Mouse.y - (self.y + self.height / 2)
-    self.angle = math.atan2(dy, dx)
+    self.angle = math.atan2(dy, dx) + math.pi / 2
 end
 
 -- Draw the player sprite with rotation
@@ -54,7 +54,7 @@ function Player:draw()
     local originY = spriteHeight / 2
 
     love.graphics.draw(self.sprite, self.x + self.width / 2,
-    self.y + self.height / 2, self.angle, scaleX, scaleY,
+                       self.y + self.height / 2, self.angle, scaleX, scaleY,
                        originX, originY)
 end
 

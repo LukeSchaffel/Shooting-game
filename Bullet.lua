@@ -1,5 +1,8 @@
 local love = require('love')
 local Player = require('Player')
+
+local bulletImage = love.graphics.newImage('sprites/laserRed.png')
+
 function Bullet()
     return {
         x = Player.x + Player.width / 2,
@@ -41,8 +44,12 @@ function Bullet()
             end
 
         end,
+
         draw = function(self)
-            love.graphics.circle('fill', self.x, self.y, self.radius)
+            love.graphics.draw(bulletImage, self.x, self.y,
+                               self.angle + math.pi / 2)
+            -- love.graphics.circle('fill', self.x, self.y, self.radius)
+
         end
 
     }

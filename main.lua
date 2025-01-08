@@ -1,4 +1,5 @@
 local love = require('love')
+local anim8 = require 'lib/anim8'
 
 -- Required modules
 local handleEnemySpawns = require('spawnEnemy')
@@ -30,6 +31,7 @@ function love.load()
     Player.angle = 0
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(0.14, 0.36, 0.46)
+
     init()
 end
 

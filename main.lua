@@ -10,7 +10,7 @@ local lifeImg = love.graphics.newImage('sprites/life.png')
 local crosshair = love.graphics.newImage('sprites/crosshair094.png')
 local drawBackground = require('drawBackground')
 
-Game = {width = 1200, height = 800}
+
 Mouse = {}
 DeadEnemies = {}
 local function moveBullets(dt)
@@ -30,6 +30,7 @@ local function init()
 end
 
 function love.load()
+    Game = {width = 1200, height = 800}
     Player.sprite = love.graphics.newImage('sprites/player.png')
     Player.damagedSprite = love.graphics.newImage('sprites/playerDamaged.png')
     Player.angle = 0
@@ -119,3 +120,7 @@ function love.mousepressed(x, y, button, istouch)
 end
 
 function love.keypressed(key) if key == "r" then init() end end
+function love.resize(w, h)
+   Game.height = h
+   Game.width = w
+end

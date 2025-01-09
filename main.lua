@@ -7,6 +7,7 @@ local Bullet = require('Bullet')
 local Player = require('Player')
 local explosionImg = love.graphics.newImage('sprites/laserRedShot.png')
 local lifeImg = love.graphics.newImage('sprites/life.png')
+local crosshair = love.graphics.newImage('sprites/crosshair094.png')
 
 Game = {width = 1200, height = 800}
 Mouse = {}
@@ -86,7 +87,7 @@ function love.draw()
     -- Draw player lives
     for i = 1, Player.health do
         love.graphics.draw(lifeImg, i * (lifeImg:getWidth() + 20),
-        Game.height - 50)
+                           Game.height - 50)
     end
 
     -- Print Kills count at the top left
@@ -94,8 +95,10 @@ function love.draw()
     love.graphics.print("Kills: " .. Player.kills, 10, 10)
 
     -- Draw mouse position as a circle
-    love.graphics.setColor(1, 1, 1) -- White color for the circle
-    love.graphics.circle('fill', Mouse.x, Mouse.y, 10) -- Draw a small circle at the mouse position
+    -- love.graphics.setColor(1, 1, 1) -- White color for the circle
+    -- love.graphics.circle('fill', Mouse.x, Mouse.y, 10) -- Draw a small circle at the mouse position
+    love.graphics.draw(crosshair, Mouse.x, Mouse.y, 0, 1 / 3, 1 / 3,
+                       crosshair:getWidth() / 2, crosshair:getHeight() / 2)
 
     for _, bullet in ipairs(Bullets) do bullet:draw() end
     -- Draw explosions

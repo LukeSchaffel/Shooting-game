@@ -31,6 +31,7 @@ end
 function love.load()
     -- Load player sprite and initialize game state
     Player.sprite = love.graphics.newImage('sprites/player.png')
+    Player.damagedSprite = love.graphics.newImage('sprites/playerDamaged.png')
     Player.angle = 0
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(0.14, 0.36, 0.46)

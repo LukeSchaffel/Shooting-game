@@ -9,7 +9,7 @@ Player.height = 100
 function Player:init()
     self.x = 200
     self.y = 200
-    self.health = 5
+    self.health = 3
     self.ammo = 100
     self.kills = 0
     self.angle = 0
@@ -45,15 +45,17 @@ end
 
 -- Draw the player sprite with rotation
 function Player:draw()
-    local spriteWidth = self.sprite:getWidth()
-    local spriteHeight = self.sprite:getHeight()
+    local currentSprite = self.health < 2 and self.damagedSprite or self.sprite
+
+    local spriteWidth = currentSprite:getWidth()
+    local spriteHeight = currentSprite:getHeight()
 
     local scaleX = self.width / spriteWidth
     local scaleY = self.height / spriteHeight
     local originX = spriteWidth / 2
     local originY = spriteHeight / 2
 
-    love.graphics.draw(self.sprite, self.x + self.width / 2,
+    love.graphics.draw(currentSprite, self.x + self.width / 2,
                        self.y + self.height / 2, self.angle, scaleX, scaleY,
                        originX, originY)
 end

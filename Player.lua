@@ -29,11 +29,11 @@ end
 
 -- Shooting logic
 function Player:shoot()
-    if self.ammo > 0 then
+    -- if self.ammo > 0 then
         local newBullet = Bullet()
         table.insert(Bullets, newBullet)
         self.ammo = self.ammo - 1
-    end
+    -- end
 end
 
 -- Player rotation towards mouse position

@@ -6,6 +6,7 @@ local handleEnemySpawns = require('spawnEnemy')
 local Bullet = require('Bullet')
 local Player = require('Player')
 local explosionImg = love.graphics.newImage('sprites/laserRedShot.png')
+local lifeImg = love.graphics.newImage('sprites/life.png')
 
 Game = {width = 1200, height = 800}
 Mouse = {}
@@ -71,14 +72,22 @@ function love.draw()
         love.graphics.setFont(love.graphics.newFont(30)) -- Set font size
         love.graphics.print("Game Over", Game.width / 2 - 100,
                             Game.height / 2 - 50) -- Display "Game Over" at the center of the screen
-        love.graphics.print("Press 'R' to restart", Game.width / 2 - 150,
+        love.graphics.print("You scored" .. Player.kills .. "points",
+                            Game.width / 2 - 150, Game.height / 2 - 50) -- Display "Game Over" at the center of the screen
+        love.graphics.print("Press 'R' to restart", Game.width / 2 - 2000,
                             Game.height / 2) -- Display restart instructions
         return
     end
 
     -- Print ammo count at the bottom left
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Ammo: " .. Player.ammo, 10, Game.height - 20)
+    -- love.graphics.setColor(1, 1, 1)
+    -- love.graphics.print("Ammo: " .. Player.ammo, 10, Game.height - 20)
+
+    -- Draw player lives
+    for i = 1, Player.health do
+        love.graphics.draw(lifeImg, i * (lifeImg:getWidth() + 20),
+        Game.height - 50)
+    end
 
     -- Print Kills count at the top left
     love.graphics.setColor(1, 1, 1)

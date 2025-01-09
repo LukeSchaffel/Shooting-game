@@ -8,6 +8,7 @@ local Player = require('Player')
 local explosionImg = love.graphics.newImage('sprites/laserRedShot.png')
 local lifeImg = love.graphics.newImage('sprites/life.png')
 local crosshair = love.graphics.newImage('sprites/crosshair094.png')
+local drawBackground = require('drawBackground')
 
 Game = {width = 1200, height = 800}
 Mouse = {}
@@ -29,7 +30,6 @@ local function init()
 end
 
 function love.load()
-    -- Load player sprite and initialize game state
     Player.sprite = love.graphics.newImage('sprites/player.png')
     Player.damagedSprite = love.graphics.newImage('sprites/playerDamaged.png')
     Player.angle = 0
@@ -68,6 +68,7 @@ function love.update(dt)
 end
 
 function love.draw()
+    drawBackground()
     -- Game over condition
     if Game.isGameOver then
         love.graphics.setColor(1, 1, 1) -- White color for the text

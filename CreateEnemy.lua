@@ -1,14 +1,23 @@
 local love = require('love')
 local enemyImg = love.graphics.newImage('sprites/enemyShip.png')
+
+Numbers = {}
 function CreateEnemy(level)
     local x, y
     -- Generate random starting position outside the game board
-    if math.random() < 0.5 then
-        x = -30 -- Start outside the left side
-        y = math.random(0, Game.height) -- Random y position within the height
+    local side = math.random(1, 4) -- Randomly choose a side (1: left, 2: right, 3: top, 4: bottom)
+    if side == 1 then
+        x = -30
+        y = math.random(0, Game.height)
+    elseif side == 2 then
+        x = Game.width + 30
+        y = math.random(0, Game.height)
+    elseif side == 3 then
+        x = math.random(0, Game.width)
+        y = -30
     else
-        x = math.random(0, Game.width) -- Random x position within the width
-        y = Game.height + 30 -- Start outside the bottom side
+        x = math.random(0, Game.width)
+        y = Game.height + 30
     end
 
     return {

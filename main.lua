@@ -29,12 +29,12 @@ local function init()
 end
 
 function love.load()
+    math.randomseed(os.time())
     Game = {width = 1200, height = 800}
     Player.sprite = love.graphics.newImage('sprites/player.png')
     Player.damagedSprite = love.graphics.newImage('sprites/playerDamaged.png')
     Player.angle = 0
     love.mouse.setVisible(false)
-    love.graphics.setBackgroundColor(0.14, 0.36, 0.46)
 
     init()
 end
@@ -96,12 +96,6 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Kills: " .. Player.kills, 10, 10)
 
-    -- Draw mouse position as a circle
-    -- love.graphics.setColor(1, 1, 1) -- White color for the circle
-    -- love.graphics.circle('fill', Mouse.x, Mouse.y, 10) -- Draw a small circle at the mouse position
-    love.graphics.draw(crosshair, Mouse.x, Mouse.y, 0, 1 / 3, 1 / 3,
-                       crosshair:getWidth() / 2, crosshair:getHeight() / 2)
-
     for _, bullet in ipairs(Bullets) do bullet:draw() end
     -- Draw explosions
     for _, ex in ipairs(DeadEnemies) do
@@ -111,6 +105,11 @@ function love.draw()
     for _, enemy in ipairs(Enemies) do enemy:draw() end
     -- Draw the player
     Player:draw()
+
+    -- love.graphics.setColor(1, 1, 1) -- Hitbox for debug
+    -- love.graphics.circle('fill', Mouse.x, Mouse.y, 10) -- Draw a small circle at the mouse position
+    love.graphics.draw(crosshair, Mouse.x, Mouse.y, 0, 1 / 3, 1 / 3,
+                       crosshair:getWidth() / 2, crosshair:getHeight() / 2)
 
 end
 

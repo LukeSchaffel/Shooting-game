@@ -5,7 +5,7 @@ local function spawnEnemy(level)
     table.insert(Enemies, newEnemy)
 end
 
-function handleEnemySpawns(dt)
+local function handleEnemySpawns(dt)
 
     -- Game level is max amount of enemies for now
     if #Enemies >= Game.level then return end

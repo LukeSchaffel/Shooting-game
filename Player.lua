@@ -2,8 +2,8 @@ local love = require('love')
 
 local Player = {}
 Player.speed = 500
-Player.width = 100
-Player.height = 100
+Player.width = 50
+Player.height = 50
 
 -- Initialize player variables
 function Player:init()

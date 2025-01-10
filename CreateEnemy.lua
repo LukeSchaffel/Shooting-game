@@ -24,8 +24,8 @@ function CreateEnemy(level)
         level = level,
         x = x,
         y = y,
-        width = 100,
-        height = 100,
+        width = 50,
+        height = 50,
         health = 0 + level,
         speed = 100 * level,
 
@@ -74,7 +74,8 @@ function CreateEnemy(level)
             -- love.graphics.setColor(1, 1, 1)
             love.graphics.draw(enemyImg, self.x + self.width / 2,
                                self.y + self.height / 2,
-                               self.angle + math.pi / 2, 1, 1, originX, originY)
+                               self.angle + math.pi / 2, 1 / 2, 1 / 2, originX,
+                               originY)
         end,
 
         takeDamage = function(self, damage)

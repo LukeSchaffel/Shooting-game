@@ -4,6 +4,7 @@ local anim8 = require 'lib/anim8'
 -- Required modules
 local handleEnemySpawns = require('spawnEnemy')
 local Bullet = require('Bullet')
+local Turret = require('Turret')
 local Player = require('Player')
 local explosionImg = love.graphics.newImage('sprites/laserRedShot.png')
 local lifeImg = love.graphics.newImage('sprites/life.png')
@@ -12,6 +13,7 @@ local drawBackground = require('drawBackground')
 
 Mouse = {}
 DeadEnemies = {}
+Turrets = {}
 local function moveBullets(dt)
     for i = #Bullets, 1, -1 do
         local bullet = Bullets[i]
@@ -36,6 +38,9 @@ function love.load()
     Player.angle = 0
     love.mouse.setVisible(false)
 
+    local startingTurret = Turret(200,200)
+    table.insert(Turrets, startingTurret)
+
     init()
 end
 
@@ -50,6 +55,15 @@ local function updateDeadEnemies(dt)
     end
 end
 
+local function updateTurrets(dt)
+    for _, turret in ipairs(Turrets) do
+        turret:findClosestEnemy()
+        turret:rotate()
+        turret:handleShotTimer(dt)
+
+    end
+end
+
 function love.update(dt)
     -- Get mouse position
     Mouse.x, Mouse.y = love.mouse.getPosition()
@@ -60,6 +74,7 @@ function love.update(dt)
     moveBullets(dt)
     handleEnemySpawns(dt)
     updateDeadEnemies(dt)
+    updateTurrets(dt)
     -- Move enemies
     for _, enemy in ipairs(Enemies) do enemy:move(dt, Player) end
 
@@ -101,6 +116,9 @@ function love.draw()
     for _, ex in ipairs(DeadEnemies) do
         love.graphics.draw(explosionImg, ex.x, ex.y, ex.time * 100)
     end
+
+    -- Draw Turrets
+    for _, turret in ipairs(Turrets) do turret:draw() end
     -- Draw enemies
     for _, enemy in ipairs(Enemies) do enemy:draw() end
     -- Draw the player

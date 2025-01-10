@@ -30,9 +30,10 @@ end
 -- Shooting logic
 function Player:shoot()
     -- if self.ammo > 0 then
-        local newBullet = Bullet()
-        table.insert(Bullets, newBullet)
-        self.ammo = self.ammo - 1
+    local newBullet = Bullet(self.x + Player.width / 2,
+                             self.y + Player.height / 2, Mouse.x, Mouse.y)
+    table.insert(Bullets, newBullet)
+    self.ammo = self.ammo - 1
     -- end
 end
 

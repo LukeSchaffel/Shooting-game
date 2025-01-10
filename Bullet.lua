@@ -3,13 +3,13 @@ local Player = require('Player')
 
 local bulletImage = love.graphics.newImage('sprites/laserRed.png')
 
-function Bullet()
+function Bullet(originX, originY, targetX, targetY)
     return {
-        x = Player.x + Player.width / 2,
-        y = Player.y + Player.height / 2,
+        x = originX,
+        y = originY,
         speed = 800,
-        angle = math.atan2(Mouse.y - (Player.y + Player.height / 2),
-                           Mouse.x - (Player.x + Player.width / 2)),
+        angle = math.atan2(targetY - (originY ),
+                           targetX - (originX )),
         radius = 5,
         move = function(bullet, dt, i)
             bullet.x = bullet.x + bullet.speed * dt * math.cos(bullet.angle)

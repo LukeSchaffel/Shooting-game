@@ -10,7 +10,6 @@ local lifeImg = love.graphics.newImage('sprites/life.png')
 local crosshair = love.graphics.newImage('sprites/crosshair094.png')
 local drawBackground = require('drawBackground')
 
-
 Mouse = {}
 DeadEnemies = {}
 local function moveBullets(dt)
@@ -69,17 +68,17 @@ function love.update(dt)
 end
 
 function love.draw()
+    love.graphics.setFont(love.graphics.newFont(30)) -- Set font size
+    love.graphics.setColor(1, 1, 1) -- White color for the text
     drawBackground()
     -- Game over condition
     if Game.isGameOver then
-        love.graphics.setColor(1, 1, 1) -- White color for the text
-        love.graphics.setFont(love.graphics.newFont(30)) -- Set font size
-        love.graphics.print("Game Over", Game.width / 2 - 100,
-                            Game.height / 2 - 50) -- Display "Game Over" at the center of the screen
-        love.graphics.print("You scored" .. Player.kills .. "points",
-                            Game.width / 2 - 150, Game.height / 2 - 50) -- Display "Game Over" at the center of the screen
-        love.graphics.print("Press 'R' to restart", Game.width / 2 - 2000,
-                            Game.height / 2) -- Display restart instructions
+        love.graphics.print("Game Over", Game.width / 2 - 150,
+                            Game.height / 2 - 150) -- Display "Game Over" at the center of the screen
+        love.graphics.print("You scored " .. Player.kills .. " points",
+                            Game.width / 2 - 150, Game.height / 2 - 100) -- Display "Game Over" at the center of the screen
+        love.graphics.print("Press 'R' to restart", Game.width / 2 - 150,
+                            Game.height / 2 - 50) -- Display restart instructions
         return
     end
 
@@ -121,6 +120,6 @@ end
 
 function love.keypressed(key) if key == "r" then init() end end
 function love.resize(w, h)
-   Game.height = h
-   Game.width = w
+    Game.height = h
+    Game.width = w
 end

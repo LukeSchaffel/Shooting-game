@@ -80,7 +80,7 @@ function CreateEnemy(level)
 
         takeDamage = function(self, damage)
             self.health = self.health - damage
-            local isDead = self.health < 1
+            local isDead = self.health <= 0
 
             return isDead
         end

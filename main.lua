@@ -5,6 +5,7 @@ local anim8 = require 'lib/anim8'
 local handleEnemySpawns = require('spawnEnemy')
 local Bullet = require('Bullet')
 local Turret = require('Turret')
+local pauseScreen = require('pause-screen')
 local Player = require('Player')
 local explosionImg = love.graphics.newImage('sprites/laserRedShot.png')
 local lifeImg = love.graphics.newImage('sprites/life.png')
@@ -28,17 +29,19 @@ local function init()
     Game.isGameOver = false
     Bullets = {}
     Enemies = {}
+
+
 end
 
 function love.load()
     math.randomseed(os.time())
-    Game = {width = 1200, height = 800}
+    Game = {width = 1200, height = 800, isPaused = true}
     Player.sprite = love.graphics.newImage('sprites/player.png')
     Player.damagedSprite = love.graphics.newImage('sprites/playerDamaged.png')
     Player.angle = 0
     love.mouse.setVisible(false)
 
-    local startingTurret = Turret(200,200)
+    local startingTurret = Turret(200, 200)
     table.insert(Turrets, startingTurret)
 
     init()
@@ -60,6 +63,7 @@ local function updateTurrets(dt)
         turret:findClosestEnemy()
         turret:rotate()
         turret:handleShotTimer(dt)
+        turret.animation:update(dt)
 
     end
 end
@@ -68,15 +72,16 @@ function love.update(dt)
     -- Get mouse position
     Mouse.x, Mouse.y = love.mouse.getPosition()
 
-    -- Update game objects
-    Player:move(dt)
-    Player:rotate()
-    moveBullets(dt)
-    handleEnemySpawns(dt)
-    updateDeadEnemies(dt)
-    updateTurrets(dt)
-    -- Move enemies
-    for _, enemy in ipairs(Enemies) do enemy:move(dt, Player) end
+    if not Game.isPaused then
+        -- Update game states
+        Player:move(dt)
+        Player:rotate()
+        moveBullets(dt)
+        handleEnemySpawns(dt)
+        updateDeadEnemies(dt)
+        updateTurrets(dt)
+        for _, enemy in ipairs(Enemies) do enemy:move(dt, Player) end -- Move enemies
+    end
 
     -- Check game over condition
     checkGameOver()
@@ -86,6 +91,10 @@ function love.draw()
     love.graphics.setFont(love.graphics.newFont(30)) -- Set font size
     love.graphics.setColor(1, 1, 1) -- White color for the text
     drawBackground()
+
+    -- Draw paused screen
+    if Game.isPaused then pauseScreen.draw() end
+
     -- Game over condition
     if Game.isGameOver then
         love.graphics.print("Game Over", Game.width / 2 - 150,
@@ -132,10 +141,20 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch)
-    if button == 1 then Player:shoot() end
+    if button == 1 then if not Game.isPaused then Player:shoot() end end
+
 end
 
-function love.keypressed(key) if key == "r" then init() end end
+function love.keypressed(key)
+    if key == "r" then init() end
+    if key == "tab" then Game.isPaused = not Game.isPaused end
+    if key == 'space' then
+        local newTurret = Turret(Player.x, Player.y)
+        table.insert(Turrets, newTurret)
+    end
+
+end
+
 function love.resize(w, h)
     Game.height = h
     Game.width = w

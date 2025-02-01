@@ -1,9 +1,17 @@
 local love = require('love')
 local player = require('player')
-
+local anim8 = require('lib/anim8')
+local turretImage = love.graphics.newImage('sprites/turret_FACE.png')
+local spriteWidth = turretImage:getWidth()
+local spriteHeight = turretImage:getHeight()
+local frameWidth = 32
+local frameHeight = 32
+local g = anim8.newGrid(frameWidth, frameHeight, spriteWidth, spriteHeight)
 function Turret(x, y)
 
     local startingShotInterval = 0.1
+    local shootingAnimationDuration = 0.5 -- Duration of the shooting animation
+
     return {
         x = x,
         y = y,
@@ -13,6 +21,9 @@ function Turret(x, y)
         shotInterval = startingShotInterval,
         timeUntilNextShot = startingShotInterval,
         closestEnemyIndex = -1,
+        animation = anim8.newAnimation(g(1, '1-4'), 0.1),
+        isShooting = false,
+        shootTimer = 0,
         findClosestEnemy = function(self)
             local closestDistance = math.huge
             local closestIndex = -1
@@ -36,7 +47,7 @@ function Turret(x, y)
                 local closestEnemy = Enemies[self.closestEnemyIndex]
                 if closestEnemy ~= nil then
                     local newBullet = Bullet(self.x, self.y, closestEnemy.x,
-                                             closestEnemy.y)
+                                             closestEnemy.y, 3000, 0.1)
                     table.insert(Bullets, newBullet)
                 end
             end
@@ -57,19 +68,18 @@ function Turret(x, y)
                 local enemyX, enemyY = closestEnemy.x, closestEnemy.y
                 local dx = enemyX - (self.x + self.width / 2)
                 local dy = enemyY - (self.y + self.height / 2)
-                self.angle = math.atan2(dy, dx) + math.pi / 2
+                self.angle = math.atan2(dy, dx)
             end
         end,
 
         draw = function(self)
-            love.graphics.push()
-            love.graphics.translate(self.x + self.width / 2,
-                                    self.y + self.height / 2)
-            love.graphics.rotate(self.angle)
-            love.graphics.translate(-self.width / 2, -self.height / 2)
-            love.graphics.polygon('fill', 0, 0, self.width, 0, self.width / 2,
-                                  self.height)
-            love.graphics.pop()
+            local scaleX = self.width / frameWidth
+            local scaleY = self.height / frameHeight
+            local originX = frameWidth / 2
+            local originY = frameHeight / 2
+            self.animation:draw(turretImage, self.x + self.width / 2,
+                                self.y + self.height / 2, self.angle, scaleX,
+                                scaleY, originX, originY)
         end
     }
 

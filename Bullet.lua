@@ -3,13 +3,13 @@ local Player = require('Player')
 
 local bulletImage = love.graphics.newImage('sprites/laserRed.png')
 
-function Bullet(originX, originY, targetX, targetY)
+function Bullet(originX, originY, targetX, targetY, speed, damage)
     return {
         x = originX,
         y = originY,
-        speed = 800,
-        angle = math.atan2(targetY - (originY ),
-                           targetX - (originX )),
+        speed = speed or 800,
+        damage = damage or 1,
+        angle = math.atan2(targetY - (originY), targetX - (originX)),
         radius = 5,
         move = function(bullet, dt, i)
             bullet.x = bullet.x + bullet.speed * dt * math.cos(bullet.angle)
@@ -29,7 +29,7 @@ function Bullet(originX, originY, targetX, targetY)
                     enemy.x + enemy.width and bullet.y + bulletRadius > enemy.y and
                     bullet.y - bulletRadius < enemy.y + enemy.height then
 
-                    local isDead = enemy:takeDamage(1)
+                    local isDead = enemy:takeDamage(bullet.damage)
                     if isDead then
                         table.insert(DeadEnemies,
                                      {x = enemy.x, y = enemy.y, time = 1})
